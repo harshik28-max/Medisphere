@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login/Register – HealthConnect</title>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+         :root {
+            --primary-color: #3a57e8;
+            --primary-dark: #203ccd;
+            --success-color: #10b981;
+            --error-color: #ef4444;
+        }
+        
+        body {
+            margin: 0;
+            font-family: 'Poppins', Arial, sans-serif;
+            background: linear-gradient(135deg, var(--primary-color), #6f85ff);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background-color: var(--primary-color);
+            animation: zoomFade 12s ease-in-out infinite alternate;
+            z-index: -1;
+            opacity: 0.8;
+        }
+        
+        @keyframes zoomFade {
+            0% {
+                transform: scale(1);
+                opacity: 0.8;
+            }
+            100% {
+                transform: scale(1.1);
+                opacity: 1;
+            }
+        }
+        
+        .login-container {
+            width: 90%;
+            max-width: 380px;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        
+        h2 {
+            margin-bottom: 25px;
+            color: var(--primary-color);
+            font-size: 1.8rem;
+        }
+        
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            font-size: 1rem;
+            box-sizing: border-box;
+            transition: border-color 0.2s;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 5px rgba(58, 87, 232, 0.5);
+        }
+        
+        .action-btn {
+            width: 100%;
+            padding: 12px;
+            margin-top: 15px;
+            font-weight: 600;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 1rem;
+        }
+        
+        .login-btn {
+            background: var(--primary-color);
+            color: white;
+            box-shadow: 0 4px 10px rgba(58, 87, 232, 0.4);
+            margin-bottom: 25px;
+        }
+        
+        .login-btn:hover {
+            background: var(--primary-dark);
+        }
+        
+        .register-link {
+            display: block;
+            margin-top: 20px;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .register-link:hover {
+            text-decoration: underline;
+        }
+        
+        .back-link {
+            margin-top: 25px;
+            display: block;
+            text-decoration: none;
+            color: #555;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+        
+        #message {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            min-height: 20px;
+            text-align: left;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        #message.show {
+            opacity: 1;
+        }
+        
+        .msg-success {
+            background: #e6fffa;
+            color: var(--success-color);
+            border: 1px solid var(--success-color);
+        }
+        
+        .msg-error {
+            background: #ffe6e6;
+            color: var(--error-color);
+            border: 1px solid var(--error-color);
+        }
+        /* Registration Modal Styling */
+        
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+        
+        .modal.open {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+            transform: scale(0.9);
+            transition: transform 0.3s ease-out;
+        }
+        
+        .modal.open .modal-content {
+            transform: scale(1);
+        }
+        
+        .modal-content h3 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+        
+        .modal-content button {
+            margin-top: 15px;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="login-container">
+        <h2>Welcome to HealthConnect</h2>
+
+        <form id="loginForm" onsubmit="return handleLogin(event)">
+            <input type="email" id="loginEmail" placeholder="Email" required>
+            <input type="password" id="loginPassword" placeholder="Password" required>
+
+            <div id="message" class="message"></div>
+
+            <button type="submit" class="action-btn login-btn">Login</button>
+        </form>
+
+        <a href="#" class="register-link" onclick="openRegisterModal(); return false;">
+        Don't have an account? Register Now
+    </a>
+
+        <a href="index.html" class="back-link">← Back to Home Page</a>
+    </div>
+    <div id="registerModal" class="modal">
+        <div class="modal-content">
+            <h3 class="text-xl">Register New Account</h3>
+            <form id="registerForm" onsubmit="return handleRegistration(event)">
+                <input type="email" id="registerEmail" placeholder="Enter Email" required>
+                <input type="password" id="registerPassword" placeholder="New Password (min 6 chars)" minlength="6" required>
+                <input type="password" id="confirmPassword" placeholder="Confirm Password" minlength="6" required>
+
+                <div id="registerMessage" class="message"></div>
+
+                <button type="submit" class="action-btn login-btn">Register Account</button>
+                <button type="button" class="action-btn" style="background:#ccc; color:#333;" onclick="closeRegisterModal()">Cancel</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const STORAGE_KEY = 'healthconnect_user_accounts';
+        const msgElement = document.getElementById('message');
+        const registerMsgElement = document.getElementById('registerMessage');
+        const registerModal = document.getElementById('registerModal');
+
+        function showMessage(element, text, isSuccess) {
+            element.textContent = text;
+            element.className = 'message show ' + (isSuccess ? 'msg-success' : 'msg-error');
+            setTimeout(() => {
+                element.classList.remove('show');
+                element.textContent = '';
+                element.className = 'message';
+            }, 5000);
+        }
+
+        function openRegisterModal() {
+            registerModal.classList.add('open');
+            registerMsgElement.classList.remove('show');
+            registerMsgElement.textContent = '';
+        }
+
+        function closeRegisterModal() {
+            registerModal.classList.remove('open');
+            document.getElementById('registerForm').reset();
+        }
+
+        function handleRegistration(event) {
+            event.preventDefault();
+
+            const email = document.getElementById('registerEmail').value.trim();
+            const password = document.getElementById('registerPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            if (password !== confirmPassword) {
+                showMessage(registerMsgElement, "Error: Passwords do not match.", false);
+                return false;
+            }
+            if (password.length < 6) {
+                showMessage(registerMsgElement, "Error: Password must be at least 6 characters.", false);
+                return false;
+            }
+
+            let accounts = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+
+            if (accounts[email]) {
+                showMessage(registerMsgElement, "Error: An account already exists for this email.", false);
+                return false;
+            }
+
+            accounts[email] = {
+                password: password
+            };
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(accounts));
+
+            showMessage(registerMsgElement, "Registration Successful! You can now log in.", true);
+
+            setTimeout(() => {
+                closeRegisterModal();
+                document.getElementById('loginEmail').value = email;
+            }, 1500);
+
+            return false;
+        }
+
+        function handleLogin(event) {
+            event.preventDefault();
+
+            const emailInput = document.getElementById('loginEmail').value.trim();
+            const passwordInput = document.getElementById('loginPassword').value;
+
+            msgElement.classList.remove('show');
+            msgElement.textContent = "";
+
+            const accounts = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+            const userAccount = accounts[emailInput];
+
+            if (userAccount && userAccount.password === passwordInput) {
+                showMessage(msgElement, `Login Successful! Welcome, ${emailInput}. Redirecting...`, true);
+
+                setTimeout(() => {
+                    window.location.href = "appoint.html";
+                }, 1000);
+
+            } else {
+                showMessage(msgElement, "Invalid email or password. Please check your credentials.", false);
+            }
+
+            return false;
+        }
+    </script>
+
+</body>
+
+</html>

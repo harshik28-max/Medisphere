@@ -1,0 +1,676 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Doctor Appointment — Modern Booking</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+         :root {
+            --bg: #eef3ff;
+            --card: #ffffff;
+            --primary: #3a57e8;
+            --primary-dark: #203ccd;
+            --text-dark: #1e293b;
+            --text-muted: #6b7280;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            --radius: 14px;
+            --transition: 0.25s ease;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            background: var(--bg);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .page-header {
+            width: 100%;
+            background: linear-gradient(135deg, #3a57e8, #657aff);
+            padding: 18px 50px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, .15);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .header-logo h1 {
+            margin: 0;
+            font-size: 1.8rem;
+            color: white;
+            font-weight: 700;
+        }
+        
+        .header-nav ul {
+            list-style: none;
+            display: flex;
+            gap: 25px;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .header-nav ul li a {
+            color: #e8ebff;
+            font-weight: 600;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: var(--transition);
+        }
+        
+        .header-nav ul li a:hover {
+            background: rgba(255, 255, 255, 0.25);
+            color: white;
+        }
+        
+        .wrap {
+            width: 100%;
+            max-width: 1250px;
+            padding: 30px 20px 50px;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 35px;
+        }
+        
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            transition: 0.3s;
+        }
+        
+        .card:hover {
+            transform: translateY(-4px);
+        }
+        
+        label {
+            font-weight: 600;
+            margin-bottom: 6px;
+            display: block;
+            color: var(--text-dark);
+        }
+        
+        input,
+        select {
+            width: 100%;
+            padding: 14px;
+            border-radius: 10px;
+            border: 1px solid #cdd4e0;
+            font-size: 15px;
+            background: #f8faff;
+            transition: var(--transition);
+        }
+        
+        input:focus,
+        select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 6px rgba(58, 87, 232, 0.4);
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
+        
+        .btn {
+            padding: 14px 20px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1em;
+            transition: var(--transition);
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+        
+        .btn-ghost {
+            background: #f1f3f9;
+            border: 1px solid #d5d9e6;
+            color: var(--text-dark);
+        }
+        
+        .btn-ghost:hover {
+            background: #e4e7f1;
+        }
+        
+        .slots-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            padding-top: 10px;
+        }
+        
+        .slot {
+            padding: 10px 16px;
+            border-radius: 8px;
+            background: #eaf1ff;
+            color: #1e3a8a;
+            border: 1px solid #cbd9ff;
+            font-weight: 600;
+            font-size: 0.92em;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .slot:hover {
+            background: #d4e2ff;
+        }
+        
+        .slot.selected {
+            background: var(--primary);
+            border-color: var(--primary-dark);
+            color: white;
+        }
+        
+        .slot.disabled {
+            background: #e6e6e6;
+            color: #777;
+            cursor: not-allowed;
+            border-color: #d8d8d8;
+        }
+        
+        .slot-message {
+            color: var(--text-muted);
+            font-style: italic;
+        }
+        
+        .appt {
+            background: #f7f8ff;
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            border: 1px solid #e0e4ff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .appt .meta strong {
+            display: block;
+            font-size: 1.1rem;
+        }
+        
+        .appt .small {
+            color: var(--text-muted);
+            font-size: 0.9em;
+        }
+        
+        #doctorsList .card {
+            padding: 18px !important;
+            border-left: 4px solid var(--primary);
+        }
+        /* New CSS for doctor image */
+        
+        .doctor-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 15px;
+            border: 2px solid var(--primary);
+        }
+        
+        .doctor-info {
+            display: flex;
+            align-items: center;
+        }
+        
+        @media (max-width: 1000px) {
+            .wrap {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .page-header {
+                flex-direction: column;
+                gap: 10px;
+            }
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            .wrap {
+                padding: 10px;
+            }
+        }
+        
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background: url("bgimg.jpg") center/cover no-repeat;
+            animation: zoomFade 12s ease-in-out infinite alternate;
+            z-index: -1;
+            opacity: 0.8;
+        }
+    </style>
+</head>
+
+<body>
+
+
+    <div class="wrap">
+        <div class="card">
+            <header>
+                <h2>Book an Appointment</h2>
+                <p style="color:var(--text-muted)">Select a doctor and available time slot below.</p>
+            </header>
+
+            <form id="bookingForm" onsubmit="return false;" autocomplete="off">
+                <div class="form-group">
+                    <label for="doctor">Select Doctor</label>
+                    <select id="doctor" required></select>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="date">Appointment Date</label>
+                        <input type="date" id="date" required />
+                    </div>
+                </div>
+
+                <div class="form-group" id="slotsWrap" style="min-height: 80px;">
+                    <label>Available Time Slots</label>
+                    <div class="slots-container" id="slots">
+                        <p class="slot-message">Select a doctor and date to view times.</p>
+                    </div>
+                </div>
+
+                <h3 style="margin-top: 30px; margin-bottom: 15px;">Patient Details</h3>
+
+                <div class="form-group">
+                    <label for="name">Patient Name</label>
+                    <input type="text" id="name" placeholder="Full name" required />
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="email">Email (Optional)</label>
+                        <input type="email" id="email" placeholder="you@example.com" />
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone</label>
+                        <input type="text" id="phone" placeholder="10-digit phone" required />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="note">Notes (Optional)</label>
+                    <input type="text" id="note" placeholder="Reason for visit, symptoms..." />
+                </div>
+
+                <div style="display:flex;gap:15px;margin-top:25px">
+                    <button class="btn btn-primary" id="bookBtn" type="submit">Confirm Appointment</button>
+                    <button class="btn btn-ghost" id="clearBtn" type="button">Clear Form</button>
+                </div>
+            </form>
+
+            <hr style="margin:25px 0;border:none;border-top:1px solid #f1f5f9" />
+
+            <div>
+                <div style="display:flex;justify-content:space-between;align-items:center">
+                    <h3 style="margin:0">Your Appointments</h3>
+                    <div style="display:flex;gap:10px;">
+                        <button class="btn btn-ghost" id="refreshList">Refresh</button>
+                        <button class="btn btn-ghost" id="clearAll">Clear All</button>
+                    </div>
+                </div>
+                <div id="appts" class="list" style="margin-top:15px"></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Our Specialists</h2>
+            <p style="color:var(--text-muted)">Time slots are generated for 9 AM to 5 PM, 30-minute intervals.</p>
+
+            <div id="doctorsList" style="margin-top:15px;display:grid;grid-template-columns:1fr;gap:12px"></div>
+
+            <hr style="margin:25px 0;border:none;border-top:1px solid #f1f5f9" />
+
+            <h3>System Information</h3>
+            <ol style="margin:0;padding-left:18px;color:var(--text-muted); font-size: 0.9em;">
+                <li>Appointments are **saved locally** in your browser's storage.</li>
+                <li>Choosing a slot disables it for the selected doctor/date.</li>
+                <li>Past dates/times are automatically disabled.</li>
+            </ol>
+        </div>
+    </div>
+
+    <script>
+        const DOCTORS = [{
+            id: 'd1',
+            name: 'Dr. Asha Reddy',
+            spec: 'General Physician',
+            room: 'OPD 12',
+            image: 'asha.jpg'
+        }, {
+            id: 'd2',
+            name: 'Dr. Mohan Kumar',
+            spec: 'Cardiologist',
+            room: 'Cardio 3',
+            image: 'mohan.jpg'
+        }, {
+            id: 'd3',
+            name: 'Dr. Saira Khan',
+            spec: 'Dermatologist',
+            room: 'Skin 5',
+            image: 'sar.jpg'
+        }, {
+            id: 'd4',
+            name: 'Dr. Vikram Patel',
+            spec: 'Pediatrics',
+            room: 'Kids 2',
+            image: 'kah.jpg'
+        }];
+
+
+        const OPEN = 9,
+            CLOSE = 17,
+            SLOT_MIN = 30;
+
+
+        const doctorSelect = document.getElementById('doctor');
+        const doctorsListEl = document.getElementById('doctorsList');
+        const dateInput = document.getElementById('date');
+        const slotsWrap = document.getElementById('slotsWrap');
+        const slotsEl = document.getElementById('slots');
+        const bookBtn = document.getElementById('bookBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const apptsEl = document.getElementById('appts');
+        const refreshListBtn = document.getElementById('refreshList');
+        const clearAllBtn = document.getElementById('clearAll');
+
+        const nameInput = document.getElementById('name');
+        const emailInput = document.getElementById('email');
+        const phoneInput = document.getElementById('phone');
+        const noteInput = document.getElementById('note');
+
+        let selectedSlot = null;
+
+        function formatTime(h, m) {
+            const h12 = ((h + 11) % 12 + 1);
+            const suffix = h >= 12 ? 'PM' : 'AM';
+            const mm = String(m).padStart(2, '0');
+            return `${h12}:${mm} ${suffix}`;
+        }
+
+        function toISODateString(date) {
+            const yyyy = date.getFullYear();
+            const mm = String(date.getMonth() + 1).padStart(2, '0');
+            const dd = String(date.getDate()).padStart(2, '0');
+            return `${yyyy}-${mm}-${dd}`;
+        }
+
+        function getAppointments() {
+            try {
+                return JSON.parse(localStorage.getItem('appointments') || '[]');
+            } catch (e) {
+                return [];
+            }
+        }
+
+        function saveAppointments(list) {
+            localStorage.setItem('appointments', JSON.stringify(list));
+        }
+
+
+        function init() {
+            DOCTORS.forEach(d => {
+                const opt = document.createElement('option');
+                opt.value = d.id;
+                opt.textContent = `${d.name} — ${d.spec}`;
+                doctorSelect.appendChild(opt);
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.style.padding = '15px';
+                card.innerHTML = `
+                    <div class="doctor-info">
+                        <img src="${d.image}" alt="${d.name}" class="doctor-avatar">
+                        <div>
+                            <strong>${d.name}</strong>
+                            <div class="small" style="color: var(--text-muted);">${d.spec} • ${d.room}</div>
+                        </div>
+                    </div>
+                `;
+                doctorsListEl.appendChild(card);
+            });
+
+            const today = new Date();
+            dateInput.min = toISODateString(today);
+            dateInput.value = toISODateString(today);
+
+            renderAppointments();
+            renderSlots();
+        }
+
+        function generateSlotsForDate(dateStr) {
+            const slots = [];
+            for (let h = OPEN; h < CLOSE; h++) {
+                for (let min = 0; min < 60; min += SLOT_MIN) {
+                    slots.push({
+                        h,
+                        min
+                    });
+                }
+            }
+            return slots;
+        }
+
+        function renderSlots() {
+            slotsEl.innerHTML = '';
+            selectedSlot = null;
+            const docId = doctorSelect.value;
+            const dateStr = dateInput.value;
+
+            if (!docId || !dateStr) {
+                slotsEl.innerHTML = '<p class="slot-message">Please select a doctor and date.</p>';
+                return;
+            }
+
+            const allAppts = getAppointments();
+            const bookedTimes = new Set(allAppts.filter(a => a.doctorId === docId && a.date === dateStr).map(a => a.time));
+
+            const slots = generateSlotsForDate(dateStr);
+            const todayStr = toISODateString(new Date());
+
+            if (slots.length === 0) {
+                slotsEl.innerHTML = '<p class="slot-message">No defined slots for this date.</p>';
+                return;
+            }
+            slots.forEach(s => {
+                const timeLabel = formatTime(s.h, s.min);
+                const isoTime = `${String(s.h).padStart(2, '0')}:${String(s.min).padStart(2, '0')}`;
+
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'slot';
+                btn.textContent = timeLabel;
+                btn.dataset.time = isoTime;
+
+                let isDisabled = false;
+                if (bookedTimes.has(isoTime)) {
+                    isDisabled = true;
+                    btn.title = 'Booked';
+                }
+                if (dateStr === todayStr && !isDisabled) {
+                    const now = new Date();
+                    const nowH = now.getHours();
+                    const nowM = now.getMinutes();
+                    if (s.h < nowH || (s.h === nowH && s.min <= nowM)) {
+                        isDisabled = true;
+                        btn.title = 'Past time';
+                    }
+                }
+
+                if (isDisabled) {
+                    btn.classList.add('disabled');
+                    btn.disabled = true;
+                }
+
+                btn.addEventListener('click', () => {
+                    if (btn.disabled) return;
+                    Array.from(slotsEl.querySelectorAll('.slot')).forEach(x => x.classList.remove('selected'));
+                    btn.classList.add('selected');
+                    selectedSlot = isoTime;
+                });
+
+                slotsEl.appendChild(btn);
+            });
+
+            if (slotsEl.children.length === 0) {
+                slotsEl.innerHTML = '<p class="slot-message">No available slots for selected date.</p>';
+            }
+        }
+
+        function handleBooking() {
+            const docId = doctorSelect.value;
+            const dateStr = dateInput.value;
+            const name = nameInput.value.trim();
+            const phone = phoneInput.value.trim();
+
+            if (!selectedSlot) {
+                alert('Please choose a time slot');
+                return;
+            }
+            if (!name) {
+                alert('Enter patient name');
+                return;
+            }
+            if (!phone) {
+                alert('Enter phone number');
+                return;
+            }
+
+            const appts = getAppointments();
+            if (appts.some(a => a.doctorId === docId && a.date === dateStr && a.time === selectedSlot)) {
+                alert('Selected slot was just booked by someone else. Please pick another.');
+                renderSlots();
+                return;
+            }
+
+            const id = 'A' + Date.now().toString(36);
+            const doctor = DOCTORS.find(d => d.id === docId);
+
+            const item = {
+                id,
+                doctorId: docId,
+                doctorName: doctor.name,
+                spec: doctor.spec,
+                date: dateStr,
+                time: selectedSlot,
+                patient: name,
+                email: emailInput.value.trim(),
+                phone: phone,
+                note: noteInput.value.trim()
+            };
+
+            appts.push(item);
+            saveAppointments(appts);
+
+            alert(`Appointment confirmed!\n${doctor.name} on ${dateStr} at ${formatTime(parseInt(selectedSlot.split(':')[0]), parseInt(selectedSlot.split(':')[1]))}`);
+            document.getElementById('bookingForm').reset();
+            dateInput.value = toISODateString(new Date());
+            renderAppointments();
+            renderSlots();
+        }
+
+        function renderAppointments() {
+            const appts = getAppointments().sort((a, b) => a.date.localeCompare(b.date) || a.time.localeCompare(b.time));
+            apptsEl.innerHTML = '';
+
+            if (appts.length === 0) {
+                apptsEl.innerHTML = '<div class="slot-message">No appointments yet.</div>';
+                return;
+            }
+
+            appts.forEach(a => {
+                const docLastName = a.doctorName.split(' ').slice(-1)[0];
+                const timeFormatted = formatTime(parseInt(a.time.split(':')[0]), parseInt(a.time.split(':')[1]));
+
+                const el = document.createElement('div');
+                el.className = 'appt';
+                el.innerHTML = `
+                    <div class="meta">
+                        <strong>${a.patient}</strong>
+                        <div class="small">${a.doctorName} (${a.spec})</div>
+                    </div>
+                    <div style="text-align:right;">
+                        <div style="font-size:1.1em; font-weight:600;">${a.date}</div>
+                        <div class="small" style="color:var(--primary);">${timeFormatted}</div>
+                        <div style="margin-top:10px;display:flex;gap:8px;justify-content:flex-end;">
+                            <button class="btn btn-ghost small" style="padding: 5px 10px;" data-action="view" data-id="${a.id}">View</button>
+                            <button class="btn btn-ghost small" style="padding: 5px 10px; color: #dc3545;" data-action="cancel" data-id="${a.id}">Cancel</button>
+                        </div>
+                    </div>
+                `;
+                apptsEl.appendChild(el);
+            });
+        }
+        doctorSelect.addEventListener('change', renderSlots);
+        dateInput.addEventListener('change', renderSlots);
+        bookBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            handleBooking();
+        });
+        clearBtn.addEventListener('click', () => {
+            document.getElementById('bookingForm').reset();
+            dateInput.value = toISODateString(new Date());
+            selectedSlot = null;
+            renderSlots();
+        });
+        refreshListBtn.addEventListener('click', renderAppointments);
+        clearAllBtn.addEventListener('click', () => {
+            if (confirm('Are you sure you want to delete ALL local appointments?')) {
+                saveAppointments([]);
+                renderAppointments();
+                renderSlots();
+            }
+        });
+        apptsEl.addEventListener('click', (e) => {
+            const btn = e.target.closest('button');
+            if (!btn) return;
+            const action = btn.dataset.action;
+            const id = btn.dataset.id;
+
+            if (action === 'cancel') {
+                if (confirm('Confirm cancellation for this appointment?')) {
+                    const list = getAppointments().filter(x => x.id !== id);
+                    saveAppointments(list);
+                    renderAppointments();
+                    renderSlots();
+                }
+            } else if (action === 'view') {
+                const a = getAppointments().find(x => x.id === id);
+                if (!a) return;
+                alert(`Appointment Details:\n\n
+                Patient: ${a.patient}
+                Doctor: ${a.doctorName}
+                Date: ${a.date} at ${formatTime(parseInt(a.time.split(':')[0]), parseInt(a.time.split(':')[1]))}
+                Phone: ${a.phone || '-'}
+                Email: ${a.email || '-'}
+                Note: ${a.note || '-'}`);
+            }
+        });
+        init();
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Doctors – HealthConnect</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial;
+            background: #f4f7f6;
+        }
+        
+        .main-header {
+            background: #fff;
+            padding: 10px 40px;
+            display: flex;
+            justify-content: space-between;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .doctor-card {
+            width: 280px;
+            background: #fff;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            margin: 20px auto;
+            text-align: center;
+        }
+        
+        .doctor-card img {
+            width: 100%;
+            border-radius: 10px;
+            height: 260px;
+            object-fit: cover;
+        }
+        
+        .doctor-area {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 40px;
+            margin-top: 40px;
+        }
+        
+        footer {
+            background: #007bff;
+            padding: 15px;
+            color: white;
+            text-align: center;
+            margin-top: 50px;
+        }
+        
+        a {
+            text-decoration: none;
+        }
+        
+        .main-nav a {
+            text-decoration: none;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            color: white;
+            background: #3a57e8;
+        }
+        
+        .main-nav a:hover {
+            background: #5769bf;
+        }
+        
+        .main-nav a.active {
+            background: #3a57e8;
+            color: white;
+        }
+        
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background: url("bgimg.jpg") center/cover no-repeat;
+            animation: zoomFade 12s ease-in-out infinite alternate;
+            z-index: -1;
+            opacity: 0.8;
+        }
+        
+        @keyframes zoomFade {
+            0% {
+                transform: scale(1);
+                opacity: 0.9;
+            }
+            100% {
+                transform: scale(1.06);
+                opacity: 1;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <header class="main-header">
+        <div class="logo">
+            <h1 style="color:#007bff;">HealthConnect</h1>
+        </div>
+        <nav class="main-nav">
+            <ul style="list-style:none; display:flex; gap:20px;">
+                <!-- Login link removed here -->
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <h2 style="text-align:center; margin-top:20px;">Our Doctors</h2>
+
+    <div class="doctor-area">
+
+        <div class="doctor-card">
+            <img src="asha.jpg">
+            <h3>Dr. Asha Reddy</h3>
+            <p>General Physician</p>
+        </div>
+
+        <div class="doctor-card">
+            <img src="mohan.jpg">
+            <h3>Dr. Mohan Kumar</h3>
+            <p>Cardiologist</p>
+        </div>
+
+        <div class="doctor-card">
+            <img src="sar.jpg">
+            <h3>Dr. Saira Khan</h3>
+            <p>Dermatologist</p>
+        </div>
+
+        <div class="doctor-card">
+            <img src="kah.jpg">
+            <h3>Dr. Vikram Patel</h3>
+            <p>Pediatrics</p>
+        </div>
+
+        <div class="doctor-card">
+            <img src="neuro.jpg">
+            <h3>Dr. Rohan Verma</h3>
+            <p>Neurologist</p>
+        </div>
+
+        <div class="doctor-card">
+            <img src="ortho.jpg">
+            <h3>Dr. Meera Joshi</h3>
+            <p>Orthopedic Surgeon</p>
+        </div>
+
+    </div>
+
+    <footer>© 2025 HealthConnect — All Rights Reserved</footer>
+
+</body>
+
+
+</html>

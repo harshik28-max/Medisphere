@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HealthConnect – Home</title>
+
+    <style>
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background: url("bgimg.jpg") center/cover no-repeat;
+            animation: zoomFade 12s ease-in-out infinite alternate;
+            z-index: -1;
+            opacity: 0.8;
+        }
+        
+        @keyframes zoomFade {
+            0% {
+                transform: scale(1);
+                opacity: 0.9;
+            }
+            100% {
+                transform: scale(1.06);
+                opacity: 1;
+            }
+        }
+        
+        body {
+            margin: 0;
+            font-family: "Poppins", Arial, sans-serif;
+            color: #333;
+            overflow-x: hidden;
+        }
+        
+        * {
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        .main-header {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 30px;
+            background: linear-gradient(135deg, #3a57e8, #6f85ff);
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.25);
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 999;
+        }
+        
+        .logo {
+            font-size: 1.6rem;
+            color: white;
+            font-weight: 700;
+        }
+        
+        .main-nav {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            margin-right: 40px;
+        }
+        
+        .main-nav ul {
+            display: flex;
+            gap: 18px;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            align-items: center;
+        }
+        
+        .main-nav a {
+            color: #eef2ff;
+            font-weight: 600;
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            transition: 0.3s;
+            text-decoration: none;
+        }
+        
+        .main-nav a:hover {
+            background: rgba(255, 255, 255, 0.25);
+            color: white;
+        }
+        
+        .page-offset {
+            height: 90px;
+        }
+        
+        .hero {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 70px 8%;
+            background: rgba(255, 255, 255, 0.6);
+            flex-wrap: wrap;
+            backdrop-filter: blur(4px);
+        }
+        
+        .hero-text {
+            max-width: 50%;
+            min-width: 320px;
+        }
+        
+        .hero-text h1 {
+            font-size: 2.6rem;
+            font-weight: 700;
+            color: #2c3e97;
+        }
+        
+        .hero-text p {
+            font-size: 1.1rem;
+            margin: 15px 0;
+            color: #555;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .search-btn,
+        .learn-btn {
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: 0.3s;
+            font-size: 1rem;
+        }
+        
+        .search-btn {
+            background: #3a57e8;
+            color: white;
+        }
+        
+        .search-btn:hover {
+            background: #243bcc;
+        }
+        
+        .learn-btn {
+            background: white;
+            border: 2px solid #3a57e8;
+            color: #3a57e8;
+        }
+        
+        .learn-btn:hover {
+            background: #3a57e8;
+            color: white;
+        }
+        
+        .hero img {
+            width: 430px;
+            border-radius: 15px;
+            margin-top: 20px;
+        }
+        
+        .doctor-preview {
+            padding: 50px 8%;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(6px);
+        }
+        
+        .doctor-preview h2 {
+            font-size: 2.1rem;
+            color: #2c3e97;
+            margin-bottom: 25px;
+        }
+        
+        .doctor-grid {
+            display: flex;
+            justify-content: center;
+            gap: 35px;
+            flex-wrap: wrap;
+        }
+        
+        .doctor-card {
+            width: 260px;
+            background: white;
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+            transition: 0.3s;
+        }
+        
+        .doctor-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .doctor-card img {
+            width: 100%;
+            height: 230px;
+            border-radius: 10px;
+            object-fit: cover;
+        }
+        
+        .site-footer {
+            background: #3a57e8;
+            color: white;
+            padding: 40px 20px 25px;
+            font-family: "Poppins", sans-serif;
+            margin-top: 40px;
+        }
+        
+        .footer-container {
+            max-width: 1200px;
+            margin: auto;
+            display: flex;
+            justify-content: space-between;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+        
+        .footer-col {
+            width: 30%;
+            min-width: 260px;
+        }
+        
+        .footer-col h3 {
+            margin-bottom: 10px;
+        }
+        
+        .footer-col p {
+            line-height: 1.5;
+            margin: 6px 0;
+        }
+        
+        .footer-col a {
+            display: block;
+            color: #dfe4ff;
+            text-decoration: none;
+            margin: 6px 0;
+            transition: 0.2s;
+        }
+        
+        .footer-col a:hover {
+            color: white;
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            margin-top: 25px;
+            font-size: 0.9rem;
+            color: #dfe4ff;
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
+            padding-top: 12px;
+        }
+        
+        @media (max-width: 700px) {
+            .footer-container {
+                flex-direction: column;
+                text-align: center;
+            }
+            .footer-col {
+                width: 100%;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+    <header class="main-header">
+        <div class="logo">HealthConnect</div>
+
+        <nav class="main-nav">
+            <ul>
+                <li><a href="doctors.html">Doctors</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+
+            <!-- ✔ Login button removed -->
+        </nav>
+    </header>
+
+    <div class="page-offset"></div>
+
+    <section class="hero">
+        <div class="hero-text">
+            <h1>Book Your Doctor Appointment Easily & Quickly</h1>
+            <p>Find the best doctors in your city and schedule appointments with just one click.</p>
+
+            <div class="hero-buttons">
+                <button class="search-btn" onclick="location.href='login.html'">Book Appointment</button>
+
+                <button class="learn-btn" onclick="location.href='about.html'">Learn More</button>
+            </div>
+        </div>
+
+        <img src="logodoct.jpg">
+    </section>
+
+    <section class="doctor-preview">
+        <h2>Top Specialist Doctors</h2>
+
+        <div class="doctor-grid">
+            <div class="doctor-card">
+                <img src="asha.jpg">
+                <h3>Dr. Asha Reddy</h3>
+                <p>General Physician</p>
+            </div>
+
+            <div class="doctor-card">
+                <img src="mohan.jpg">
+                <h3>Dr. Mohan Kumar</h3>
+                <p>Cardiologist</p>
+            </div>
+
+            <div class="doctor-card">
+                <img src="sar.jpg">
+                <h3>Dr. Saira Khan</h3>
+                <p>Dermatologist</p>
+            </div>
+
+            <div class="doctor-card">
+                <img src="kah.jpg">
+                <h3>Dr. Vikram Patel</h3>
+                <p>Pediatrics</p>
+            </div>
+        </div>
+    </section>
+
+
+
+</body>
+
+</html>
+<footer class="site-footer">
+    <div class="footer-container">
+
+        <div class="footer-col">
+            <h3>HealthConnect</h3>
+            <p>
+                We make healthcare simple and stress-free by helping you find trusted doctors, book appointments instantly, and access expert care when you need it most.
+            </p>
+        </div>
+
+        <div class="footer-col">
+            <h3>Contact</h3>
+            <p>Email: healthconnect@gmail.com</p>
+            <p>Phone: +91 8520829679</p>
+            <p>Visakhapatnam, Andhra Pradesh, India</p>
+        </div>
+
+        <div class="footer-col">
+            <h3>Quick Links</h3>
+            <a href="index.html">Home</a>
+            <a href="doctors.html">Doctors</a>
+            <a href="about.html">About Us</a>
+            <a href="contact.html">Contact</a>
+        </div>
+
+    </div>
+
+    <p class="footer-bottom">© 2025 HealthConnect — All Rights Reserved</p>
+</footer>
