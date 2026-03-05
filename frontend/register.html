@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register – SmartQ Hospital</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+  <div id="loading-overlay" class="loading-overlay hidden">
+    <div class="spinner"></div>
+  </div>
+
+  <header class="header">
+    <div class="header-container">
+      <a href="/" class="logo">
+        <i class="fas fa-hospital-alt"></i>
+        <span>Smart<span class="logo-accent">Q</span></span>
+      </a>
+      <nav class="nav">
+        <a href="/" class="nav-link">Home</a>
+        <a href="patient-login.html" class="nav-link">Login</a>
+      </nav>
+      <div class="header-right">
+        <div class="real-time-clock" id="real-time-clock"></div>
+        <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()">
+          <i class="fas fa-moon"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <section class="auth-section">
+    <div class="auth-container">
+      <div class="auth-card glass-card">
+        <div class="auth-header">
+          <div class="auth-icon">
+            <i class="fas fa-user-plus"></i>
+          </div>
+          <h2>Create Account</h2>
+          <p>Join SmartQ for seamless healthcare booking</p>
+        </div>
+        <form id="register-form" class="auth-form">
+          <div class="form-group">
+            <label for="name"><i class="fas fa-user"></i> Full Name</label>
+            <input type="text" id="name" name="name" placeholder="Enter your full name" required>
+          </div>
+          <div class="form-group">
+            <label for="email"><i class="fas fa-envelope"></i> Email Address</label>
+            <input type="email" id="email" name="email" placeholder="Enter your email" required>
+          </div>
+          <div class="form-group">
+            <label for="phone"><i class="fas fa-phone"></i> Phone Number</label>
+            <input type="tel" id="phone" name="phone" placeholder="Enter your phone number" required>
+          </div>
+          <div class="form-group">
+            <label for="password"><i class="fas fa-lock"></i> Password</label>
+            <div class="password-input">
+              <input type="password" id="password" name="password" placeholder="Create a password" required minlength="6">
+              <button type="button" class="password-toggle" onclick="togglePassword('password')">
+                <i class="fas fa-eye"></i>
+              </button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="confirm-password"><i class="fas fa-lock"></i> Confirm Password</label>
+            <div class="password-input">
+              <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirm your password" required minlength="6">
+              <button type="button" class="password-toggle" onclick="togglePassword('confirm-password')">
+                <i class="fas fa-eye"></i>
+              </button>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary btn-full">
+            <i class="fas fa-user-plus"></i> Register
+          </button>
+        </form>
+        <div class="auth-footer">
+          <p>Already have an account? <a href="patient-login.html">Login here</a></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script src="script.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      initRegisterPage();
+    });
+  </script>
+</body>
+</html>

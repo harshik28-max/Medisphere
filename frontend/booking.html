@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Book Appointment – SmartQ Hospital</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+  <div id="loading-overlay" class="loading-overlay hidden">
+    <div class="spinner"></div>
+  </div>
+
+  <header class="header">
+    <div class="header-container">
+      <a href="/" class="logo">
+        <i class="fas fa-hospital-alt"></i>
+        <span>Smart<span class="logo-accent">Q</span></span>
+      </a>
+      <nav class="nav">
+        <a href="/" class="nav-link">Home</a>
+        <div class="nav-user" id="nav-user">
+          <span class="user-greeting" id="user-greeting"></span>
+          <button class="btn btn-outline btn-sm" onclick="logout()">Logout</button>
+        </div>
+      </nav>
+      <div class="header-right">
+        <div class="real-time-clock" id="real-time-clock"></div>
+        <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()">
+          <i class="fas fa-moon"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <section class="booking-section">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Book an <span class="text-gradient">Appointment</span></h2>
+        <p class="section-subtitle">Select your doctor, choose a date and time slot</p>
+      </div>
+
+      <div class="booking-layout">
+        <div class="booking-form-container glass-card">
+          <form id="booking-form" class="booking-form">
+            <div class="form-group">
+              <label for="doctor"><i class="fas fa-user-md"></i> Select Doctor</label>
+              <select id="doctor" name="doctor" required>
+                <option value="">Choose a doctor...</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="department"><i class="fas fa-hospital"></i> Department</label>
+              <input type="text" id="department" name="department" placeholder="Auto-filled based on doctor" readonly>
+            </div>
+            <div class="form-group">
+              <label for="appointment-date"><i class="fas fa-calendar"></i> Appointment Date</label>
+              <input type="date" id="appointment-date" name="appointment-date" required>
+            </div>
+            <div class="form-group">
+              <label><i class="fas fa-clock"></i> Select Time Slot</label>
+              <div class="time-slots-grid" id="time-slots-grid">
+                <!-- Time slots generated dynamically -->
+              </div>
+              <input type="hidden" id="time-slot" name="time-slot" required>
+            </div>
+            <div class="booking-summary glass-card" id="booking-summary" style="display:none;">
+              <h3><i class="fas fa-receipt"></i> Booking Summary</h3>
+              <div class="summary-row">
+                <span>Doctor:</span>
+                <span id="summary-doctor">-</span>
+              </div>
+              <div class="summary-row">
+                <span>Department:</span>
+                <span id="summary-department">-</span>
+              </div>
+              <div class="summary-row">
+                <span>Date:</span>
+                <span id="summary-date">-</span>
+              </div>
+              <div class="summary-row">
+                <span>Time:</span>
+                <span id="summary-time">-</span>
+              </div>
+              <div class="summary-row summary-total">
+                <span>Consultation Fee:</span>
+                <span>&#8377;500</span>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary btn-full btn-lg">
+              <i class="fas fa-calendar-check"></i> Proceed to Payment
+            </button>
+          </form>
+        </div>
+
+        <!-- Booking History -->
+        <div class="booking-history glass-card">
+          <h3><i class="fas fa-history"></i> My Appointments</h3>
+          <div class="appointments-list" id="appointments-list">
+            <p class="empty-state">No appointments yet.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script src="script.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      initBookingPage();
+    });
+  </script>
+</body>
+</html>
