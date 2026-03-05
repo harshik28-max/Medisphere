@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Doctor Dashboard – SmartQ Hospital</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body class="dashboard-body">
+  <div id="loading-overlay" class="loading-overlay hidden">
+    <div class="spinner"></div>
+  </div>
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <a href="/" class="logo">
+        <i class="fas fa-hospital-alt"></i>
+        <span>Smart<span class="logo-accent">Q</span></span>
+      </a>
+    </div>
+    <div class="sidebar-user">
+      <div class="sidebar-avatar">
+        <i class="fas fa-user-md"></i>
+      </div>
+      <span class="sidebar-username" id="sidebar-username">Doctor</span>
+      <span class="sidebar-role">Doctor</span>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="#" class="sidebar-link active" data-section="queue">
+        <i class="fas fa-list-ol"></i>
+        <span>Today's Queue</span>
+      </a>
+      <a href="#" class="sidebar-link" data-section="token-calling">
+        <i class="fas fa-bullhorn"></i>
+        <span>Token Calling</span>
+      </a>
+      <a href="#" class="sidebar-link" data-section="analytics">
+        <i class="fas fa-chart-bar"></i>
+        <span>Analytics</span>
+      </a>
+      <a href="#" class="sidebar-link" data-section="records">
+        <i class="fas fa-file-medical"></i>
+        <span>Patient Records</span>
+      </a>
+      <a href="#" class="sidebar-link logout" onclick="logout()">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Logout</span>
+      </a>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="dashboard-main">
+    <div class="dashboard-header">
+      <button class="sidebar-toggle" id="sidebar-toggle">
+        <i class="fas fa-bars"></i>
+      </button>
+      <h1 id="dashboard-title">Today's Queue</h1>
+      <div class="dashboard-header-right">
+        <div class="real-time-clock" id="real-time-clock"></div>
+        <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()">
+          <i class="fas fa-moon"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Queue Section -->
+    <section class="dashboard-section active" id="section-queue">
+      <div class="dashboard-stats">
+        <div class="dash-stat-card">
+          <div class="dash-stat-icon" style="background: linear-gradient(135deg, #3b82f6, #1d4ed8);">
+            <i class="fas fa-users"></i>
+          </div>
+          <div class="dash-stat-info">
+            <span class="dash-stat-number" id="dash-total">0</span>
+            <span class="dash-stat-label">Total Today</span>
+          </div>
+        </div>
+        <div class="dash-stat-card">
+          <div class="dash-stat-icon" style="background: linear-gradient(135deg, #f59e0b, #d97706);">
+            <i class="fas fa-clock"></i>
+          </div>
+          <div class="dash-stat-info">
+            <span class="dash-stat-number" id="dash-waiting">0</span>
+            <span class="dash-stat-label">Waiting</span>
+          </div>
+        </div>
+        <div class="dash-stat-card">
+          <div class="dash-stat-icon" style="background: linear-gradient(135deg, #10b981, #059669);">
+            <i class="fas fa-check-circle"></i>
+          </div>
+          <div class="dash-stat-info">
+            <span class="dash-stat-number" id="dash-completed">0</span>
+            <span class="dash-stat-label">Completed</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="queue-table-container glass-card">
+        <div class="table-header">
+          <h3><i class="fas fa-list-ol"></i> Today's Appointments</h3>
+        </div>
+        <div class="table-responsive">
+          <table class="queue-table">
+            <thead>
+              <tr>
+                <th>Token</th>
+                <th>Patient Name</th>
+                <th>Department</th>
+                <th>Time Slot</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="queue-table-body">
+              <tr>
+                <td colspan="6" class="empty-table">No appointments today.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Token Calling Section -->
+    <section class="dashboard-section" id="section-token-calling">
+      <div class="token-calling-container">
+        <div class="token-display-large glass-card">
+          <h3>Now Serving</h3>
+          <div class="current-token-number" id="current-token-display">
+            <span class="token-hash">#</span>
+            <span id="current-token-num">0</span>
+          </div>
+          <p class="current-patient-name" id="current-patient-name">-</p>
+          <button class="btn btn-primary btn-lg" id="call-next-btn" onclick="callNextToken()">
+            <i class="fas fa-forward"></i> Call Next Token
+          </button>
+        </div>
+        <div class="token-queue-preview glass-card">
+          <h3><i class="fas fa-list"></i> Upcoming Tokens</h3>
+          <div class="upcoming-tokens" id="upcoming-tokens">
+            <p class="empty-state">No tokens in queue.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Analytics Section -->
+    <section class="dashboard-section" id="section-analytics">
+      <div class="analytics-grid">
+        <div class="chart-card glass-card">
+          <h3><i class="fas fa-chart-pie"></i> Waiting vs Completed</h3>
+          <div class="chart-container">
+            <canvas id="doughnut-chart"></canvas>
+          </div>
+        </div>
+        <div class="chart-card glass-card">
+          <h3><i class="fas fa-chart-bar"></i> Appointments per Doctor</h3>
+          <div class="chart-container">
+            <canvas id="bar-chart"></canvas>
+          </div>
+        </div>
+        <div class="chart-card glass-card chart-wide">
+          <h3><i class="fas fa-chart-line"></i> Daily Patient Visits (Last 7 Days)</h3>
+          <div class="chart-container">
+            <canvas id="line-chart"></canvas>
+          </div>
+        </div>
+      </div>
+      <div class="analytics-summary glass-card">
+        <div class="analytics-stat">
+          <i class="fas fa-calendar-check"></i>
+          <span id="analytics-total-appointments">0</span>
+          <label>Total Appointments</label>
+        </div>
+        <div class="analytics-stat">
+          <i class="fas fa-users"></i>
+          <span id="analytics-total-patients">0</span>
+          <label>Total Patients</label>
+        </div>
+        <div class="analytics-stat">
+          <i class="fas fa-user-md"></i>
+          <span id="analytics-total-doctors">0</span>
+          <label>Total Doctors</label>
+        </div>
+        <div class="analytics-stat">
+          <i class="fas fa-rupee-sign"></i>
+          <span id="analytics-total-revenue">0</span>
+          <label>Total Revenue</label>
+        </div>
+      </div>
+    </section>
+
+    <!-- Records Section -->
+    <section class="dashboard-section" id="section-records">
+      <div class="records-container">
+        <div class="patients-list-card glass-card">
+          <h3><i class="fas fa-users"></i> Patients</h3>
+          <input type="text" class="search-input" id="patient-search" placeholder="Search patients...">
+          <div class="patients-list" id="patients-list">
+            <p class="empty-state">No patients found.</p>
+          </div>
+        </div>
+        <div class="records-detail-card glass-card">
+          <h3><i class="fas fa-file-medical"></i> Patient Records</h3>
+          <div id="records-detail-content">
+            <p class="empty-state">Select a patient to view records.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Add Record Modal -->
+  <div id="add-record-modal" class="modal hidden">
+    <div class="modal-overlay" onclick="closeModal('add-record-modal')"></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3><i class="fas fa-plus-circle"></i> Add Patient Record</h3>
+        <button class="modal-close" onclick="closeModal('add-record-modal')">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <form id="add-record-form">
+        <input type="hidden" id="record-patient-id">
+        <div class="form-group">
+          <label for="record-diagnosis"><i class="fas fa-stethoscope"></i> Diagnosis</label>
+          <textarea id="record-diagnosis" rows="3" required placeholder="Enter diagnosis..."></textarea>
+        </div>
+        <div class="form-group">
+          <label for="record-prescription"><i class="fas fa-prescription"></i> Prescription</label>
+          <textarea id="record-prescription" rows="3" placeholder="Enter prescription..."></textarea>
+        </div>
+        <div class="form-group">
+          <label for="record-notes"><i class="fas fa-notes-medical"></i> Doctor Notes</label>
+          <textarea id="record-notes" rows="3" placeholder="Enter notes..."></textarea>
+        </div>
+        <div class="form-group">
+          <label for="record-visit-date"><i class="fas fa-calendar"></i> Visit Date</label>
+          <input type="date" id="record-visit-date" required>
+        </div>
+        <button type="submit" class="btn btn-primary btn-full">
+          <i class="fas fa-save"></i> Save Record
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- View Records Modal -->
+  <div id="view-records-modal" class="modal hidden">
+    <div class="modal-overlay" onclick="closeModal('view-records-modal')"></div>
+    <div class="modal-content modal-lg">
+      <div class="modal-header">
+        <h3><i class="fas fa-file-medical-alt"></i> Patient Records</h3>
+        <button class="modal-close" onclick="closeModal('view-records-modal')">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div id="view-records-content">
+        <!-- Records loaded dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      initDashboardPage();
+    });
+  </script>
+</body>
+</html>
